@@ -84,7 +84,7 @@ function detect_browser_version($useragent,$title)
 
 	// Grab the browser version if its present
 	preg_match('/'.$start.'[\ |\/|\:]?([.0-9a-zA-Z]+)/i', $useragent, $regmatch);
-	$version=$regmatch[1];
+	$version = isset($regmatch[1]) ? $regmatch[1] : '';
 
 	// Return browser Title and Version, but first..some titles need to be changed
 	if(strtolower($title)=="msie"

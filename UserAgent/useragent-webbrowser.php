@@ -1837,9 +1837,12 @@ function detect_webbrowser($useragent)
 	{
 		$link="#";
 		$title="Unknown";
-		$code="null";
+		$code="unknown";
 
-		return $title;
+		$result['code'] = $code;
+		$result['title'] = $title;
+		$result['useragent'] = $useragent; // 添加原始UA信息
+		return $result;
 	}
 
 
