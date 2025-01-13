@@ -2,11 +2,12 @@
 /**
  * UserAgent for Typecho
  *
- * @package UserAgent
- * @author kuye
- * @version 0.1.0
- * @update: 2015.11.21
- * @link http://yuzhiwei.com.cn/
+ * @package: UserAgent
+ * @author: kuye
+ * @Improver: mxdyeah & https://www.mxdyeah.top/
+ * @version: 0.2.0
+ * @update: 2025.01.11
+ * @link: http://yuzhiwei.com.cn/
  */
 class UserAgent_Plugin implements Typecho_Plugin_Interface
 {
@@ -81,27 +82,38 @@ class UserAgent_Plugin implements Typecho_Plugin_Interface
 
         require_once 'useragent-os.php';
         $os = detect_os($agent);
-        $os_img = self::img($os['code'],"/os/",$os['title']);
+        $os = is_array($os) ? $os : ['code' => 'unknown', 'title' => 'Unknown'];
+        $os_img = self::img($os['code'], "/os/", $os['title']);
         $os_title = $os['title'];
 
         require_once 'useragent-webbrowser.php';
         $wb = detect_webbrowser($agent);
-        $wb_img = self::img($wb['code'],"/net/",$wb['title']);
+        $wb = is_array($wb) ? $wb : ['code' => 'unknown', 'title' => 'Unknown'];
+        $wb_img = self::img($wb['code'], "/net/", $wb['title']);
         $wb_title = $wb['title'];
 
-        switch($show){
-            case 1:
-                $ua = "&nbsp;&nbsp;".$os_img."&nbsp;".$wb_img;
-                break;
-            case 2:
-                $ua = "&nbsp;&nbsp;(".$os_title."&nbsp;/&nbsp;".$wb_title.")";
-                break;
-            case 3:
-                $ua = "&nbsp;&nbsp;".$os_img."(".$os_title.")&nbsp;/&nbsp;".$wb_img."(".$wb_title.")";
-                break;
-            default :
-                $ua = "&nbsp;&nbsp;".$os_img.$wb_img;
-                break;
+        if ($os['code'] == 'unknown' && $wb['code'] == 'unknown') {
+            $ua = "&nbsp;&nbsp;" . self::img('unknown', "/os/", 'Unknown');
+        } else {
+            switch($show){
+                case 1:
+                    $ua = "&nbsp;&nbsp;".$os_img."&nbsp;".$wb_img;
+                    break;
+                case 2:
+                    $ua = "&nbsp;&nbsp;(".$os_title."&nbsp;/&nbsp;".$wb_title.")";
+                    break;
+                case 3:
+                    $ua = "&nbsp;&nbsp;".$os_img."(".$os_title.")&nbsp;/&nbsp;".$wb_img."(".$wb_title.")";
+                    break;
+                default :
+                    $ua = "&nbsp;&nbsp;".$os_img.$wb_img;
+                    break;
+            }
+        }
+
+        // 如果浏览器或系统是未知的，添加原始UA信息
+        if ((isset($os['code']) && $os['code'] == 'unknown') || (isset($wb['code']) && $wb['code'] == 'unknown')) {
+            $ua .= "<details><summary>原始UA信息</summary><pre>".$agent."</pre></details>";
         }
 
         echo $ua;

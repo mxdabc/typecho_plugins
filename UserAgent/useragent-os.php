@@ -714,7 +714,7 @@ function detect_os($useragent)
 			|| preg_match('/Windows NT 6.4; Win64; x64/i', $useragent)
 			|| preg_match('/Windows NT 6.4; WOW64/i', $useragent))
 		{
-			$title="Windows 10 x64 Edition";
+			$title="Windows 10/11 x64 Edition";
 			$code="win-6";
 		}
 		elseif(preg_match('/Windows NT 10.0/i', $useragent)
